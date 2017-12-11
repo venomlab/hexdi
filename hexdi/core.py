@@ -5,6 +5,8 @@ from hexdi import meta
 from hexdi import lifetime
 
 clstype = typing.Union[str, typing.Type[gentype.T]]
+ltype_instance = lifetime.BaseLifeTimeManager
+ltype = typing.Type[ltype_instance]
 
 
 class DiContainer(metaclass=meta.DiContainerMeta):
@@ -12,44 +14,45 @@ class DiContainer(metaclass=meta.DiContainerMeta):
         self.container = dict()
 
     @staticmethod
-    def _get_name(o):
+    def _sanitize_accessor(o):
         if isinstance(o, str):
             return o
         else:
             return o.__name__
 
-    def binded(self, cls: clstype) -> bool:
-        return self.container.get(self._get_name(cls)) is not None
+    def binded(self, accessor) -> bool:
+        return self.container.get(self._sanitize_accessor(accessor)) is not None
 
-    def bind_type(self, resolver: typing.Type[gentype.T],
-                  cls: typing.Union[typing.Iterable[clstype], clstype, ...],
-                  lifetime_manager: lifetime.BaseLifeTimeManager) -> None:
-        if isinstance(cls, str) or issubclass(resolver, cls):
-            self._bind_type(cls, lifetime_manager)
-        elif isinstance(cls, collections.Iterable):
-            for element in cls:
-                self.bind_type(resolver, element, lifetime_manager)
+    def bind_type(self, type_to_resolve: typing.Type, accessor, lifetime_manager: ltype) -> None:
+        if isinstance(accessor, str) or issubclass(type_to_resolve, accessor):
+            self._bind_type(accessor, lifetime_manager(type_to_resolve))
+        elif isinstance(accessor, collections.Iterable):
+            for element in accessor:
+                self.bind_type(type_to_resolve, element, lifetime_manager)
 
-    def _bind_type(self, cls: clstype, lifetime_manager):
-        if not self.binded(cls):
-            self.container[self._get_name(cls)] = lifetime_manager
+    def _bind_type(self, accessor, lifetime_manager: ltype_instance):
+        if not self.binded(accessor):
+            self.container[self._sanitize_accessor(accessor)] = lifetime_manager
         else:
-            raise Exception('already registered instance by \'%s\'' % self._get_name(cls))
+            raise Exception('already registered instance by \'%s\'' % self._sanitize_accessor(accessor))
 
-    def bind_instance(self, instance: gentype.T, cls: clstype):
-        self._bind_type(cls, lifetime.PermanentLifeTimeManager(instance))
+    def bind_instance(self, instance: gentype.T, accessor):
+        self._bind_type(accessor, lifetime.PreparedInstanceLifeTimeManager(instance))
 
-    def unbind(self, cls: clstype) -> None:
-        if self.binded(cls):
-            del self.container[self._get_name(cls)]
+    def unbind(self, accessor) -> None:
+        if self.binded(accessor):
+            del self.container[self._sanitize_accessor(accessor)]
         else:
-            raise Exception('class %s is not registered' % self._get_name(cls))
+            raise Exception('class %s is not registered' % self._sanitize_accessor(accessor))
 
-    def resolve(self, cls: clstype) -> gentype.T:
-        if self.binded(cls):
-            return self.container.get(self._get_name(cls)).resolve()
+    def resolve(self, accessor: clstype) -> gentype.T:
+        if self.binded(accessor):
+            return self.container.get(self._sanitize_accessor(accessor)).resolve()
         else:
-            raise Exception('class %s is not registered' % self._get_name(cls))
+            raise Exception('class %s is not registered' % self._sanitize_accessor(accessor))
+
+    def destroy(self):
+        self.container.clear()
 
 
 def get_root_container() -> DiContainer:

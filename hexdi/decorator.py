@@ -4,24 +4,24 @@ import hexdi.gentype
 import hexdi.lifetime
 
 
-def component(lifetime, base_type=None):
-    def component_wrap(type_to_reg):
+def component(lifetime, accessor=None):
+    def component_wrap(type_to_bind):
         container = hexdi.get_root_container()
-        if base_type is None:
-            container.bind_type(cls=type_to_reg, resolver=type_to_reg, lifetime_manager=lifetime(type_to_reg))
+        if accessor is None:
+            container.bind_type(accessor=type_to_bind, type_to_resolve=type_to_bind, lifetime_manager=lifetime)
         else:
-            container.bind_type(cls=base_type, resolver=type_to_reg, lifetime_manager=lifetime(type_to_reg))
-        return type_to_reg
+            container.bind_type(accessor=accessor, type_to_resolve=type_to_bind, lifetime_manager=lifetime)
+        return type_to_bind
 
     return component_wrap
 
 
-def permanent(base_type=None):
-    return component(hexdi.lifetime.PermanentLifeTimeManager, base_type)
+def permanent(accessor=None):
+    return component(hexdi.lifetime.PermanentLifeTimeManager, accessor)
 
 
-def transient(base_type=None):
-    return component(hexdi.lifetime.PerResolveLifeTimeManager, base_type)
+def transient(accessor=None):
+    return component(hexdi.lifetime.PerResolveLifeTimeManager, accessor)
 
 
 def dependency(cls: typing.Type[hexdi.gentype.T]):
