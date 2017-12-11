@@ -1,0 +1,10 @@
+{
+  "author": "Dmitriy Selischev",
+  "back": false,
+  "exclude": "__pycache__",
+  "license": "mit",
+  "program": "copyright",
+  "short": "Highly extensible Dependency injection framework for humans",
+  "single": true,
+  "year": "2017"
+}

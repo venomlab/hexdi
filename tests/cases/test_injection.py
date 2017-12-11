@@ -1,4 +1,4 @@
-from hexdi_tests.tests import basetest
+from tests.cases import basetest
 import hexdi
 
 
