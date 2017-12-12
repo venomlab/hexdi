@@ -102,3 +102,4 @@ virtualenv/
 .mypy_cache/
 
 .idea/
+README.rst

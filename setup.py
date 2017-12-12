@@ -4,12 +4,12 @@ from setuptools import find_packages, setup
 here = os.path.abspath(os.path.dirname(__file__))
 
 # Get the long description from the README file
-with open(os.path.join(here, 'README.md'), encoding='utf-8') as f:
+with open(os.path.join(here, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
     name='hexdi',
-    version='0.1.2b1',
+    version='0.1.2b2',
     packages=find_packages(include=('hexdi',)),
     classifiers=[
         # How mature is this project? Common values are
