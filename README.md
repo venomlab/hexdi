@@ -28,16 +28,19 @@ class SomeAimplementation(SomeA):
         return 42
 
 
+#inject instance of SomeA as a first argument
 @hexdi.inject(SomeA)
 def test_injection(a: SomeA):
     print('test_injection:', a.foo())
 
 
 class ClassWithDependency:
+    #constructor injection
     @hexdi.inject(SomeA)
     def __init__(self, a: SomeA):
         print('ClassWithDependency.__init__:', a.foo())
 
+    #after that we can use property like an instance of SomeA class
     @property
     @hexdi.dependency(SomeA)
     def some_a(self) -> SomeA: pass
@@ -45,6 +48,7 @@ class ClassWithDependency:
     def foo(self):
         print('ClassWithDependency.foo:', self.some_a.foo())
 
+    #method injection also works fine. Because injection members are passing after all transmitted positional arguments
     @hexdi.inject(SomeA)
     def foo_with_injection(self, a: SomeA):
         print('ClassWithDependency.foo_with_injection:', a.foo())
