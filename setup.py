@@ -9,14 +9,14 @@ with open(os.path.join(here, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name='hexdi',
-    version='0.1.1',
+    version='0.1.2b1',
     packages=find_packages(include=('hexdi',)),
     classifiers=[
         # How mature is this project? Common values are
         #   3 - Alpha
         #   4 - Beta
         #   5 - Production/Stable
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
 
         # Indicate who your project is intended for
         'Intended Audience :: Developers',
