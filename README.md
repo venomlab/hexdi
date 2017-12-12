@@ -1,6 +1,8 @@
 # hexdi
 Highly extensible Dependency Injection framework for humans
 
+Project location: https://github.com/zibertscrem/hexdi
+
 # Installation
 ```bash
 pip install hexdi
