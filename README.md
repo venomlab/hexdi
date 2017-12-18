@@ -214,3 +214,32 @@ if __name__ == '__main__':
     # but all works fine, because it is lazy injection
     test()  # prints: 100500
 ```
+
+# Multifile project
+
+If you have a project with separated base objects(to registration) and implementations(to injecting) there will be problematically to identify these implementations if you import it nowhere.
+For that situation, there is a class loading abstraction with a basic implementation that gets a list of **specification** objects with implementation modules. These specification object can be: 
+- dot-separated module path as string: 'pack1.pack2.module1'
+- a function/lambda without params that returns a **specification**
+- a tuple that contains a function as a first argument and tuple of values as a second argument. Function should return a **specification**
+
+
+```python
+import hexdi
+from examples.multifile.interfaces import SomeA
+
+loader = hexdi.basic_loader([
+    'examples.multifile.implementations'
+])
+
+
+@hexdi.inject(SomeA)
+def test(a: SomeA):
+    print(a.foo())
+
+
+if __name__ == '__main__':
+    loader.load()
+    test()  # prints: 42
+
+```
