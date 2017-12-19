@@ -1,6 +1,6 @@
 import importlib
 import typing
-import collections
+from hexdi import utils
 
 
 class AbstractBaseLoader(object):
@@ -29,24 +29,6 @@ class BasicLoader(AbstractOneTimeLoader):
         super().__init__()
         self.__modules = modules
 
-    def __get_module_name(self, obj):
-        if isinstance(obj, str):
-            return obj
-
-        if callable(obj):
-            return self.__get_module_name(obj.__call__())
-
-        if isinstance(obj, collections.Iterable):
-            lst = list(obj)
-            if len(lst) > 0:
-                o = lst.pop(0)
-                if callable(o):
-                    if len(lst) > 0:
-                        arguments = lst[1]
-                        return self.__get_module_name(o.__call__(*arguments))
-
-        return None
-
     def _do_loading(self):
         for mod in self.__modules:
-            importlib.import_module(self.__get_module_name(mod), package=__name__)
+            importlib.import_module(utils.get_module_name(mod), package=__name__)
