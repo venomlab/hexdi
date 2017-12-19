@@ -16,3 +16,19 @@ def get_module_name(obj):
                 if len(lst) > 0:
                     arguments = lst[1]
                     return get_module_name(o.__call__(*arguments))
+
+
+def get_submodules(mod):
+    pass
+
+
+def is_module(mod):
+    pass
+
+
+def is_package(mod):
+    pass
+
+
+def read_module_as_string(mod):
+    pass
