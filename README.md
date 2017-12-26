@@ -228,7 +228,7 @@ For that situation, there is a class loading abstraction with a basic implementa
 import hexdi
 from examples.multifile.interfaces import SomeA
 
-loader = hexdi.basic_loader([
+loader = hexdi.get_loader([
     'examples.multifile.implementations'
 ])
 
@@ -243,3 +243,25 @@ if __name__ == '__main__':
     test()  # prints: 42
 
 ```
+
+You also able to use recursive module finder to find all local modules(not in site-packages) that contains type registering.
+Use same rules as module loader has
+
+```python
+import hexdi
+from examples.multifile.interfaces import SomeA
+
+# That finder will find that
+finder = hexdi.get_finder(['examples.multifile-finder'])
+loader = hexdi.get_loader(finder.find())
+
+
+@hexdi.inject(SomeA)
+def test(a: SomeA):
+    print(a.foo())
+
+
+if __name__ == '__main__':
+    loader.load()
+    test()  # prints: 69
+``` 

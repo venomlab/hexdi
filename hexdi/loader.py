@@ -31,4 +31,4 @@ class BasicLoader(AbstractOneTimeLoader):
 
     def _do_loading(self):
         for mod in self.__modules:
-            importlib.import_module(utils.get_module_name(mod), package=__name__)
+            utils.load_module(utils.get_module_name(mod))

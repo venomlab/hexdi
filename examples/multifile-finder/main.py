@@ -1,9 +1,9 @@
 import hexdi
 from examples.multifile.interfaces import SomeA
 
-loader = hexdi.get_loader([
-    'examples.multifile.implementations'
-])
+# That finder will find that
+finder = hexdi.get_finder(['examples.multifile-finder'])
+loader = hexdi.get_loader(finder.find())
 
 
 @hexdi.inject(SomeA)
@@ -13,4 +13,4 @@ def test(a: SomeA):
 
 if __name__ == '__main__':
     loader.load()
-    test()  # prints: 42
+    test()  # prints: 69

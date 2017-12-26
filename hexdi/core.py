@@ -3,8 +3,10 @@ import typing
 from hexdi import gentype
 from hexdi import meta
 from hexdi import lifetime
+from hexdi import utils
 
 clstype = typing.Union[str, typing.Type[gentype.T]]
+restype = typing.Union[str, gentype.T]
 ltype_instance = lifetime.BaseLifeTimeManager
 ltype = typing.Type[ltype_instance]
 
@@ -23,7 +25,9 @@ class DiContainer(metaclass=meta.DiContainerMeta):
     def binded(self, accessor) -> bool:
         return self.container.get(self._sanitize_accessor(accessor)) is not None
 
-    def bind_type(self, type_to_resolve: typing.Type, accessor, lifetime_manager: ltype) -> None:
+    def bind_type(self, type_to_resolve: restype, accessor, lifetime_manager: ltype) -> None:
+        if isinstance(type_to_resolve, str):
+            type_to_resolve = utils.load_class(type_to_resolve)
         if isinstance(accessor, str) or issubclass(type_to_resolve, accessor):
             self._bind_type(accessor, lifetime_manager(type_to_resolve))
         elif isinstance(accessor, collections.Iterable):
