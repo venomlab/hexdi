@@ -17,8 +17,9 @@ class MultifileTest(basetest.BaseHexDITest):
     def test_finder_loader_found(self):
         finder = hexdi.get_finder(['tests.cases.multifile'])
         modules = finder.find()
-        self.assertListEqual(modules, ['tests.cases.multifile.multifile-for-finder-a',
-                                       'tests.cases.multifile.multifile-for-finder-b'])
+        self.assertIn('tests.cases.multifile.multifile-for-finder-a', modules)
+        self.assertIn('tests.cases.multifile.multifile-for-finder-b', modules)
+        self.assertEqual(len(modules), 2)
         loader = hexdi.get_loader(modules)
         loader.load()
         self.assertTrue(self.container.binded(SomeTestA))

@@ -54,11 +54,11 @@ class RecursiveRegexFinder(AbstractOneTimeFinder):
                 break
 
     def __investigate(self, mod):
-        if utils.is_package(mod):
+        if utils.get_package_if_exists(mod):
             submodules = utils.get_submodules(mod)
             for m in submodules:
                 self.__investigate(m)
-        elif utils.is_module(mod):
+        elif utils.get_module_if_exists(mod):
             self.__found_modules.add(mod)
 
     def _do_find(self) -> typing.List[typing.AnyStr]:

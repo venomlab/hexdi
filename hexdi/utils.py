@@ -1,6 +1,16 @@
 import collections
 import importlib
 import os
+import site
+
+
+def __get_root_package_directories():
+    current_working_dir = os.getcwd()
+    root_packages = site.getsitepackages()
+    return root_packages + [current_working_dir]
+
+
+__DIRECTORIES_TO_SEARCH_PACKAGES = __get_root_package_directories()
 
 
 def get_module_name(obj):
@@ -21,45 +31,55 @@ def get_module_name(obj):
 
 
 def __sanitize_path(mod: str):
-    return mod.replace('.', '/')
+    path = mod.replace('.', '/')
+    return list([os.path.join(d, path) for d in __DIRECTORIES_TO_SEARCH_PACKAGES])
 
 
 def __sanitize_module(mod: str):
-    path = __sanitize_path(mod)
-    return "{}.py".format(path)
+    paths = __sanitize_path(mod)
+    return list(["{}.py".format(path) for path in paths])
 
 
 def get_submodules(mod):
-    if is_package(mod):
-        path = __sanitize_path(mod)
-        lst = os.listdir(path)
-        submodules = list()
+    package = get_package_if_exists(mod)
+    if package is not None:
+        lst = os.listdir(package)
+        submodules = set()
         for l in lst:
             if l in ['__pycache__']:
                 continue
-            if __is_module_without_sanitizing(path, l) and l.endswith('.py'):
-                submodules.append(l[:-3])
+            if __is_module_without_sanitizing(package, l) and l.endswith('.py'):
+                submodules.add(l[:-3])
             else:
-                submodules.append(l)
+                submodules.add(l)
         return list(["{}.{}".format(mod, l) for l in submodules])
     else:
         return []
 
 
-def is_module(mod):
-    return os.path.isfile(__sanitize_module(mod))
+def get_module_if_exists(mod):
+    mods = __sanitize_module(mod)
+    for m in mods:
+        if os.path.isfile(m):
+            return m
+    return None
+
+
+def get_package_if_exists(mod):
+    paths = __sanitize_path(mod)
+    for p in paths:
+        if os.path.isdir(p):
+            return p
+    return None
 
 
 def __is_module_without_sanitizing(path, mod):
     return os.path.isfile(os.path.join(path, mod))
 
 
-def is_package(mod):
-    return os.path.isdir(__sanitize_path(mod))
-
-
 def read_module_as_string(mod):
-    with open(__sanitize_module(mod), encoding='utf-8', mode='r') as f:
+    mod_path = get_module_if_exists(mod)
+    with open(mod_path, encoding='utf-8', mode='r') as f:
         return f.read()
 
 
