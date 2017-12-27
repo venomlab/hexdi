@@ -244,7 +244,7 @@ if __name__ == '__main__':
 
 ```
 
-You also able to use recursive module finder to find all local modules(not in site-packages) that contains type registering.
+You also able to use recursive module finder to find all local packages, site-packages, dist-packages modules that contains type registering.
 Use same rules as module loader has
 
 ```python
