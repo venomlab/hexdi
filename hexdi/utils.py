@@ -112,8 +112,7 @@ def load_module(mod: str):
 
 def load_class(path: str):
     mod, cls = path.rsplit('.', 1)
-    module_path = ".".join(mod)
-    _module = load_module(module_path)
+    _module = load_module(mod)
     return getattr(_module, cls)
 
 
