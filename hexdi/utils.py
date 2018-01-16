@@ -88,12 +88,10 @@ def load_module(mod: str):
 
 
 def load_class(path: str):
-    splitted = path.split('.')
-    mod = splitted[:-1]
-    cls = splitted[-1:]
+    mod, cls = path.rsplit('.')
     module_path = ".".join(mod)
     _module = load_module(module_path)
-    return _module.get(cls)
+    return getattr(_module, cls)
 
 
 def loading_indicator(percentage, prefix='', suffix='', indicator='❚'):
