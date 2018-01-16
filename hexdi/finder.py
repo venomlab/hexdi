@@ -49,9 +49,9 @@ class AbstractOneTimeFinder(AbstractBaseFinder):
 
 
 class RecursiveRegexFinder(AbstractOneTimeFinder):
-    __component_re = re.compile(r'@?(?:hexdi\.)?{}'.format(decorator.component.__name__), re.MULTILINE)
-    __permanent_re = re.compile(r'@?(?:hexdi\.)?{}'.format(decorator.permanent.__name__), re.MULTILINE)
-    __transient_re = re.compile(r'@?(?:hexdi\.)?{}'.format(decorator.transient.__name__), re.MULTILINE)
+    __component_re = re.compile(r'@?hexdi\.{}'.format(decorator.component.__name__), re.MULTILINE)
+    __permanent_re = re.compile(r'@?hexdi\.{}'.format(decorator.permanent.__name__), re.MULTILINE)
+    __transient_re = re.compile(r'@?hexdi\.{}'.format(decorator.transient.__name__), re.MULTILINE)
     __bind_type_re = re.compile(r'[^.]{}'.format(core.DiContainer.bind_type.__name__), re.MULTILINE)
     __bind_inst_re = re.compile(r'[^.]{}'.format(core.DiContainer.bind_instance.__name__), re.MULTILINE)
 
