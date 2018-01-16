@@ -9,7 +9,7 @@ with open(os.path.join(here, 'README.rst'), encoding='utf-8') as f:
 
 setup(
     name='hexdi',
-    version='0.1.6',
+    version='0.1.7',
     packages=find_packages(include=('hexdi',)),
     classifiers=[
         # How mature is this project? Common values are
