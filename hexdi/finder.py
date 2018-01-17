@@ -73,7 +73,11 @@ class RecursiveRegexFinder(AbstractOneTimeFinder):
         module_string = utils.read_module_as_string(mod)
         for regex in self.__regex_list:
             if regex.search(module_string) is not None:
-                self.__context.add(mod)
+                if mod.endswith('.__init__'):
+                    module_to_add, suffix = mod.rsplit('.', 1)
+                else:
+                    module_to_add = mod
+                self.__context.add(module_to_add)
                 break
 
     def __investigate(self, mod):
