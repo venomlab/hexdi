@@ -31,6 +31,7 @@ from hexdi import finder
 import hexdi.core
 # Quick access imports
 from hexdi.decorator import component, permanent, transient, dependency, inject
+from hexdi.core import get_root_container
 
 
 # Shortcut functions
