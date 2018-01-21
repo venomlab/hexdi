@@ -28,21 +28,21 @@ import collections
 from hexdi import lifetime, gentype as __gentype__
 from hexdi import loader
 from hexdi import finder
-from hexdi.core import get_root_container, clstype as __clstype__
+import hexdi.core
 # Quick access imports
 from hexdi.decorator import component, permanent, transient, dependency, inject
 
 
 # Shortcut functions
 
-def resolve(accessor: __clstype__) -> __gentype__.T:
+def resolve(accessor: hexdi.core.clstype) -> __gentype__.T:
     """
     shortcut for resolving from root container
 
     :param accessor: accessor for resolving object
     :return: resolved object of requested type
     """
-    return get_root_container().resolve(accessor=accessor)
+    return hexdi.core.get_root_container().resolve(accessor=accessor)
 
 
 def get_loader(modules: collections.Iterable) -> loader.AbstractBaseLoader:
@@ -62,3 +62,34 @@ def get_finder(packages: collections.Iterable) -> finder.AbstractBaseFinder:
     :param packages:
     """
     return finder.RecursiveRegexFinder(packages)
+
+
+def bind_type(type_to_bind: hexdi.core.restype, accessor: hexdi.core.clstype, lifetime_manager: hexdi.core.ltype):
+    """
+    shortcut for bind_type on root container
+
+    :param type_to_bind: type that will be resolved by accessor
+    :param accessor: accessor for resolving object
+    :param lifetime_manager: type of lifetime manager for this binding
+    """
+    hexdi.core.get_root_container().bind_type(type_to_bind, accessor, lifetime_manager)
+
+
+def bind_permanent(type_to_bind: hexdi.core.restype, accessor: hexdi.core.clstype):
+    """
+    shortcut for bind_type with PermanentLifeTimeManager on root container
+
+    :param type_to_bind: type that will be resolved by accessor
+    :param accessor: accessor for resolving object
+    """
+    hexdi.core.get_root_container().bind_type(type_to_bind, accessor, lifetime.PermanentLifeTimeManager)
+
+
+def bind_transient(type_to_bind: hexdi.core.restype, accessor: hexdi.core.clstype):
+    """
+    shortcut for bind_type with PerResolveLifeTimeManager on root container
+
+    :param type_to_bind: type that will be resolved by accessor
+    :param accessor: accessor for resolving object
+    """
+    hexdi.core.get_root_container().bind_type(type_to_bind, accessor, lifetime.PerResolveLifeTimeManager)
