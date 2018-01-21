@@ -54,13 +54,19 @@ class RecursiveRegexFinder(AbstractOneTimeFinder):
     __transient_re = re.compile(r'@?hexdi\.{}'.format(decorator.transient.__name__), re.MULTILINE)
     __bind_type_re = re.compile(r'[^.]{}'.format(core.DiContainer.bind_type.__name__), re.MULTILINE)
     __bind_inst_re = re.compile(r'[^.]{}'.format(core.DiContainer.bind_instance.__name__), re.MULTILINE)
+    __bind_type_stc_re = re.compile(r'hexdi\.bind_type', re.MULTILINE)
+    __bind_permanent_stc_re = re.compile(r'hexdi\.bind_permanent', re.MULTILINE)
+    __bind_transient_stc_re = re.compile(r'hexdi\.bind_transient', re.MULTILINE)
 
     __regex_list = [
         __component_re,
         __permanent_re,
         __transient_re,
         __bind_type_re,
-        __bind_inst_re
+        __bind_inst_re,
+        __bind_type_stc_re,
+        __bind_permanent_stc_re,
+        __bind_transient_stc_re,
     ]
 
     def __init__(self, packages):
