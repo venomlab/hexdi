@@ -3,7 +3,7 @@
 test()
 {
     echo "Run cases..."
-    source virtualenv/bin/activate && python tests/test_main.py
+    tox
 }
 
 clean()
@@ -20,7 +20,7 @@ build()
     clean
     echo "Building..."
     mdtorst
-    source virtualenv/bin/activate && python setup.py sdist && python setup.py bdist_wheel
+    python setup.py sdist && python setup.py bdist_wheel
 }
 
 deploy()

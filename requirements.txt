@@ -3,3 +3,6 @@ twine
 setuptools
 copyright
 typing
+pandoc
+pytest
+tox
