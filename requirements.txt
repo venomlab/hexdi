@@ -2,4 +2,4 @@ wheel
 twine
 setuptools
 copyright
-typing
+tox

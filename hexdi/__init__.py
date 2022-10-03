@@ -23,7 +23,7 @@
 
 from __future__ import absolute_import
 
-import collections
+import collections.abc
 
 from hexdi import lifetime, gentype as __gentype__
 from hexdi import loader
@@ -46,7 +46,7 @@ def resolve(accessor: hexdi.core.clstype) -> __gentype__.T:
     return hexdi.core.get_root_container().resolve(accessor=accessor)
 
 
-def get_loader(modules: collections.Iterable) -> loader.AbstractBaseLoader:
+def get_loader(modules: collections.abc.Iterable) -> loader.AbstractBaseLoader:
     """
     shortcut for constructing of basic loader
 
@@ -56,7 +56,7 @@ def get_loader(modules: collections.Iterable) -> loader.AbstractBaseLoader:
     return loader.BasicLoader(modules)
 
 
-def get_finder(packages: collections.Iterable) -> finder.AbstractBaseFinder:
+def get_finder(packages: collections.abc.Iterable) -> finder.AbstractBaseFinder:
     """
     shortcut for constructing of recursive regex finder
 
