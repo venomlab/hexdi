@@ -40,5 +40,4 @@ setup(
     author_email='zibertscrem@gmail.com',
     description='Highly extensible Dependency injection framework for humans',
     long_description=long_description,
-    install_requires=['typing']
 )
